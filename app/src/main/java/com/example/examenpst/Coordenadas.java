@@ -6,13 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Coordenadas extends AppCompatActivity {
-    ArrayList<EditText> lati;
-    ArrayList<EditText>longi;
+    ArrayList<EditText> lati = new ArrayList<>();
+    ArrayList<EditText>longi = new ArrayList<>();
     ArrayList<String> lon;
     ArrayList<String> lat;
     @Override
@@ -39,12 +40,31 @@ public class Coordenadas extends AppCompatActivity {
             String longitud = et.getText().toString();
             lon.add(longitud);
         }
-        Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-        startActivity(intent);
+        if (validator(lat,lon)){
+            Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+            intent.putStringArrayListExtra("latitud", lat);
+            intent.putStringArrayListExtra("longitud", lon);
+            startActivity(intent);
+        }
+
 
     }
-    public boolean validator(String coordenada){
-        
+    public boolean validator(ArrayList<String> lat, ArrayList<String> lon){
+        for (String latitud: lat ){
+            if(!val(latitud)){
+                Toast.makeText(getApplicationContext(),"No es válida la coordenada ingresada",Toast.LENGTH_SHORT);
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean val(String coor){
+        try{
+            double coordenada = Double.valueOf(coor);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
     }
 
 
